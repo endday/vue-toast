@@ -9,9 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    //修改输出打包后的脚本文件名，该文件即是 package.json 中配置的 main 属性的对应文件
-    filename: 'toast.js',
-    //增加以下库配置信息
+    filename: 'toast.min.js',
     library: 'Toast',
     libraryTarget: 'umd',
     umdNamedDefine: true
@@ -74,7 +72,7 @@ if (process.env.NODE_ENV === 'production') {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
+      sourceMap: false,
       compress: {
         warnings: false
       }

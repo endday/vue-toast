@@ -1,6 +1,5 @@
 import container from './container.vue'
 
-let instance
 let vm
 const types = ['default', 'info', 'success', 'warning', 'error']
 
