@@ -37,16 +37,7 @@ function domReady(fn) {
   }
 }
 
-// 支持 CommonJS
-if (typeof exports === 'object') {
-  module.exports = toast
-// 支持 AMD
-} else if (typeof define === 'function' && define.amd) {
-  define([], function () {
-    return toast
-  })
-// Vue 是全局变量时，自动调用 Vue.use()
-} else if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== 'undefined' && window.Vue) {
   domReady(() => {
     window.Vue.use(toast)
   })

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="../dist/toast.min.js"></script>
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/languages/javascript.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+  <header>
+    <p>vue-toast</p>
+  </header>
+  <el-form class="form"
+           label-width="80px">
+  <pre class="code">
+    <code class="html">
+    this.$toast('hello world', {
+      type: 'default',
+      duration: 5000,
+      closable: false,
+      position: 'bottom-middle',
+      maxToasts: 3
+    })
+    </code>
+  </pre>
+    <el-form-item label="Type">
+      <el-select v-model="type" placeholder="请选择">
+        <el-option
+          v-for="(value, index) in typeArray"
+          :key="index"
+          :value="value"
+          :label="value">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="Duration">
+      <el-input class="input"
+                v-model.number="duration"
+                placeholder="请输入延迟">
+        <template slot="append">ms</template>
+      </el-input>
+    </el-form-item>
+    <el-form-item label="MaxToasts">
+      <el-input class="input"
+                v-model.number="maxToasts"
+                placeholder="请输入最大数量">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="Closable">
+      <el-switch v-model="closable"
+                 active-text="显示关闭按钮"
+                 inactive-text="不显示关闭按钮">
+      </el-switch>
+    </el-form-item>
+    <el-form-item label="Position">
+      <el-select v-model="position" placeholder="请选择">
+        <el-option
+          v-for="(value, index) in positions"
+          :key="index"
+          :value="value"
+          :label="value">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="showToast">Show Toast</el-button>
+    </el-form-item>
+  </el-form>
+</div>
+</body>
+<script>
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    type: 'default',
+    typeArray: [
+      'default',
+      'info',
+      'warning',
+      'error',
+      'success'
+    ],
+    duration: 5000,
+    closable: false,
+    position: 'bottom-middle',
+    positions: [
+      'bottom-middle',
+      'bottom-left',
+      'bottom-right',
+      'top-middle',
+      'top-left',
+      'top-right'
+    ],
+    maxToasts: 3
+  },
+  methods: {
+    showToast() {
+      this.$toast('hello world', {
+        type: this.type,
+        duration: this.duration,
+        closable: this.closable,
+        position: this.position,
+        maxToasts: this.maxToasts
+      })
+    }
+  }
+})
+</script>
+<style>
+  body {
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+  }
+
+  body, p {
+    margin: 0;
+  }
+
+  #app {
+
+  }
+
+  header p {
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    background-color: #ddd;
+    margin: 0;
+  }
+
+  .code {
+    background-color: #f8f8f8;
+  }
+
+  .form {
+    width: 600px;
+    padding-top: 40px;
+    margin: 0 auto;
+  }
+
+  .input {
+    width: 300px;
+  }
+</style>
+</html>

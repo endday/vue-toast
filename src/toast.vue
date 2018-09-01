@@ -8,7 +8,7 @@
       <div class="vue-toast_message">
         <span v-html="message"></span>
         <span class="vue-toast_close-btn"
-              v-if="options.closable"
+              v-if="closable"
               @click="remove">
         </span>
       </div>
@@ -17,69 +17,65 @@
 </template>
 
 <script>
-  const defaultOptions = {
-    type: 'default', // info warning error success
-    duration: 5000,
-    closable: false
-  }
-  export default {
-    props: {
-      message: {
-        required: true
-      },
-      options: {
-        type: Object
-      },
-      id: {
-        type: [String, Number]
+export default {
+  props: {
+    message: {
+      required: true
+    },
+    closable: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      type: String,
+      default: 'default'
+    },
+    duration: {
+      type: [Number, String],
+      default: 5000
+    },
+    id: {
+      type: [String, Number]
+    }
+  },
+  mounted() {
+    if (parseInt(this.duration) !== 0) {
+      this.startLazyAutoDestroy()
+    }
+  },
+  methods: {
+    // Public
+    remove() {
+      this.clearTimer()
+      this.handleDestroy()
+    },
+    // Private
+    startLazyAutoDestroy() {
+      this.clearTimer()
+      this.timerDestroy = setTimeout(() => {
+        this.remove()
+      }, parseInt(this.duration))
+    },
+    clearTimer() {
+      if (this.timerDestroy) {
+        clearTimeout(this.timerDestroy)
       }
     },
-    computed: {
-      type() {
-        return this.options.type
-      },
-      fullOptions() {
-        return Object.assign({}, defaultOptions, this.options)
-      }
-    },
-    mounted() {
-      if (this.fullOptions.duration !== 0) {
+    startTimer() {
+      if (parseInt(this.duration) !== 0) {
         this.startLazyAutoDestroy()
       }
     },
-    methods: {
-      // Public
-      remove() {
+    stopTimer() {
+      if (parseInt(this.duration) !== 0) {
         this.clearTimer()
-        this.handleDestroy()
-      },
-      // Private
-      startLazyAutoDestroy() {
-        this.clearTimer()
-        this.timerDestroy = setTimeout(() => {
-          this.remove()
-        }, this.fullOptions.duration)
-      },
-      clearTimer() {
-        if (this.timerDestroy) {
-          clearTimeout(this.timerDestroy)
-        }
-      },
-      startTimer() {
-        if (this.fullOptions.duration !== 0) {
-          this.startLazyAutoDestroy()
-        }
-      },
-      stopTimer() {
-        if (this.fullOptions.duration !== 0) {
-          this.clearTimer()
-        }
-      },
-      handleDestroy() {
-        this.$emit('destroy', this.id)
       }
+    },
+    handleDestroy() {
+      this.$emit('destroy', this.id)
     }
   }
+}
 </script>
 
 <style>
@@ -87,7 +83,7 @@
     position: relative;
     min-height: 38px;
     line-height: 1.1em;
-    padding: 0 20px;
+    padding: 0 40px;
     font-size: 15px;
     font-weight: 300;
     color: #fff;
@@ -121,7 +117,8 @@
 
   .vue-toast_message {
     font-size: 16px;
-    padding: 10px 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     color: white;
     font-family: arial, sans-serif;
     white-space: nowrap
